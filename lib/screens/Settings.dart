@@ -12,6 +12,7 @@ class _SettingScreenState extends State<SettingScreen> {
 
   void _setPhoneNumber(TextEditingController _phoneNumber) async {
     String _userInput = _phoneNumber.text;
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       prefs.setString('number', _userInput);
@@ -35,21 +36,26 @@ class _SettingScreenState extends State<SettingScreen> {
             showDialog(
                 context: context,
                 builder: (_) => AlertDialog(
-                      content: Container(
-                        height: 100,
+                      content: SingleChildScrollView(
                         child: Column(
                           children: [
-                            TextField(
+                            TextFormField(
                               controller: _userInputNumber,
+                              keyboardType: TextInputType.numberWithOptions(
+                                  signed: false, decimal: false),
                             ),
-                            TextButton(
-                                onPressed: () {
-                                  _setPhoneNumber(_userInputNumber);
-                                },
-                                child: Text('Submit'))
                           ],
                         ),
                       ),
+                      actions: <Widget>[
+                        TextButton(
+                          child: Text('Submit'),
+                          onPressed: () {
+                            _setPhoneNumber(_userInputNumber);
+                            Navigator.of(context).pop();
+                          },
+                        )
+                      ],
                     ));
           },
           child: ListTile(
